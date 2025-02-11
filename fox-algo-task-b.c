@@ -4,7 +4,7 @@
 #include <string.h>
 #include <mpi.h>
 
-#define N 256
+#define N 4000
 
 void multiply_submatrices(double *sub_a, double *sub_b, double *sub_c, int block_size)
 {
@@ -23,6 +23,7 @@ void multiply_submatrices(double *sub_a, double *sub_b, double *sub_c, int block
 
 int main(int argc, char *argv[])
 {
+  double start_time = MPI_Wtime();
   int my_col, my_row;
   int rank, size;
   MPI_Init(&argc, &argv);
@@ -168,5 +169,13 @@ int main(int argc, char *argv[])
   MPI_Comm_free(&row_comm);
   MPI_Comm_free(&grid_comm);
   MPI_Finalize();
+  double end_time = MPI_Wtime();
+  double execution_time = end_time - start_time;
+
+  if (rank == 0)
+  {
+    printf("Execution time: %f seconds\n", execution_time);
+  }
+
   return 0;
 }
